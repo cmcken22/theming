@@ -1,0 +1,14 @@
+.button {
+  @apply p-button rounded-button;
+  @apply font-primary;
+}
+
+.button--primary {
+  @apply bg-button-primary-background text-button-primary-contrastText;
+  @apply disabled:bg-button-primary-disabled-background/40 disabled:text-button-primary-disabled-contrastText;
+}
+
+.button--secondary {
+  @apply bg-button-secondary-background text-button-secondary-contrastText;
+  @apply disabled:bg-button-secondary-disabled-background/40 disabled:text-button-secondary-disabled-contrastText;
+}
