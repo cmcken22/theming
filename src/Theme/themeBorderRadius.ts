@@ -5,7 +5,7 @@ const borderRadius = {
   },
   radix: {
     button: "4px",
-    input: "30px",
+    input: "4px",
   },
 };
 

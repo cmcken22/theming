@@ -7,7 +7,8 @@ interface ThemeContextType {
 }
 
 const INITIAL_STATE: ThemeContextType = {
-  theme: "scp",
+  // theme: "scp",
+  theme: "radix",
   setTheme: () => {},
 };
 

@@ -3,7 +3,10 @@ import Button from "./Button";
 import cx from "classnames";
 import { useTheme, useThemeContext } from "./ThemeContext";
 import Input from "./Input";
-import React from "react";
+import React, { useEffect } from "react";
+import { Avatar } from "./Avatar";
+import defaultTailwindConfig from "../tailwind.config";
+import resolveConfig from "tailwindcss/resolveConfig";
 
 const themeOptions = [
   {
@@ -24,64 +27,51 @@ function App() {
     setTheme(themeName);
   };
 
-  const buttons = [
-    {
-      label: "Primary",
-      props: {
-        color: "primary",
-      },
-    },
-    // {
-    //   label: "Primary",
-    //   props: {
-    //     color: "primary",
-    //     disabled: true,
-    //   },
-    // },
-    // {
-    //   label: "Primary",
-    //   props: {
-    //     color: "primary",
-    //     variant: "outlined",
-    //   },
-    // },
-    // // {
-    // //   label: "Primary",
-    // //   props: {
-    // //     color: "primary",
-    // //     disabled: true,
-    // //   },
-    // // },
-    // {
-    //   label: "Secondary",
-    //   props: {
-    //     color: "secondary",
-    //   },
-    // },
-    // {
-    //   label: "Secondary",
-    //   props: {
-    //     color: "secondary",
-    //     disabled: true,
-    //   },
-    // },
-    // {
-    //   label: "Secondary",
-    //   props: {
-    //     color: "secondary",
-    //     variant: "outlined",
-    //   },
-    // },
-  ];
-
   const inputs = [
     {
       label: "Primary",
       props: {
-        color: "primary",
+        color: "default",
+      },
+    },
+    {
+      label: "Primary",
+      props: {
+        color: "success",
+      },
+    },
+    {
+      label: "Primary",
+      props: {
+        color: "error",
+      },
+    },
+    {
+      label: "Primary",
+      props: {
+        color: "warning",
       },
     },
   ];
+
+  useEffect(() => {
+    console.log("defaultTailwindConfig:", defaultTailwindConfig);
+    resolveConfig({
+      ...defaultTailwindConfig,
+      theme: {
+        ...defaultTailwindConfig.theme,
+        colorThemes: {
+          primary: "#ff5733",
+          secondary: "#33ff57",
+        },
+        paddingThemes: {
+          small: "4px",
+          large: "16px",
+        },
+        // ...theme,
+      },
+    });
+  }, []);
 
   return (
     <div className={`h-screen`}>
@@ -105,7 +95,9 @@ function App() {
               <tr>
                 <th></th>
                 <th>Primary</th>
+                <th>Outlined</th>
                 <th>Secondary</th>
+                <th>Outlined</th>
               </tr>
             </thead>
             <tbody>
@@ -115,7 +107,17 @@ function App() {
                   <Button color="primary">Click</Button>
                 </td>
                 <td>
+                  <Button color="primary" variant="outlined">
+                    Click
+                  </Button>
+                </td>
+                <td>
                   <Button color="secondary">Click</Button>
+                </td>
+                <td>
+                  <Button color="secondary" variant="outlined">
+                    Click
+                  </Button>
                 </td>
               </tr>
               <tr>
@@ -126,7 +128,17 @@ function App() {
                   </Button>
                 </td>
                 <td>
+                  <Button color="primary" variant="outlined" disabled>
+                    Click
+                  </Button>
+                </td>
+                <td>
                   <Button color="secondary" disabled>
+                    Click
+                  </Button>
+                </td>
+                <td>
+                  <Button color="secondary" variant="outlined" disabled>
                     Click
                   </Button>
                 </td>
@@ -159,6 +171,7 @@ function App() {
             <Input key={`input--${idx}`} {...input.props} />
           ))}
         </div>
+        {/* <Avatar theme="light" icon="hello" src="tttt" /> */}
       </div>
     </div>
   );

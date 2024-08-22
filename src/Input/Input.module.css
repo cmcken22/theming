@@ -1,6 +1,35 @@
 .input {
-  @apply bg-input-background text-input-contrastText;
   @apply p-input;
   @apply font-primary;
-  @apply border rounded-input border-input-border;
+  @apply border rounded-input border-border-main;
+}
+
+.input.default {
+  @apply border-border-main;
+}
+.input.default:focus-visible {
+  @apply outline-none border-primary-main;
+
+}
+.input.success {
+  @apply border-success-main;
+}
+.input.success:focus-visible {
+  @apply outline-none border-primary-main;
+
+}
+
+.input.warning {
+  @apply border-warning-main;
+}
+.input.warning:focus-visible {
+  @apply outline-none border-primary-main;
+
+}
+.input.error {
+  @apply border-error-main;
+}
+.input.error:focus-visible {
+  @apply outline-none border-primary-main;
+
 }

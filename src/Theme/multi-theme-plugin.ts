@@ -4,17 +4,17 @@ import hexRgb from "hex-rgb";
 // ------------------------------
 // Helpers
 // ------------------------------
-function getRgbChannels(hex) {
+function getRgbChannels(hex: string) {
   const { red, green, blue } = hexRgb(hex);
   return `${red} ${green} ${blue}`;
 }
 
-const getAlpha = (hex) => {
+const getAlpha = (hex: string) => {
   const { alpha } = hexRgb(hex);
   return alpha;
 };
 
-function isColor(value) {
+function isColor(value: string) {
   // Regular expression to match hex color codes including alpha
   const hexPattern = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/;
 
@@ -22,7 +22,11 @@ function isColor(value) {
 }
 
 // Generate CSS variables
-function getCssVariableDeclarations(input, path = [], output = {}) {
+function getCssVariableDeclarations(
+  input: any,
+  path: string[] = [],
+  output: Record<string, string> = {}
+) {
   Object.entries(input).forEach(([key, value]) => {
     const newPath = path.concat(key);
     if (typeof value !== "string") {
@@ -39,8 +43,13 @@ function getCssVariableDeclarations(input, path = [], output = {}) {
 }
 
 // Generate color extension object
-function getColorUtilitiesWithCssVariableReferences(input, path = []) {
+// @ts-ignore
+function getColorUtilitiesWithCssVariableReferences(
+  input: any,
+  path: string[] = []
+) {
   return Object.fromEntries(
+    // @ts-ignore
     Object.entries(input).map(([key, value]) => {
       const newPath = path.concat(key);
       if (typeof value !== "string") {
@@ -60,7 +69,7 @@ function getColorUtilitiesWithCssVariableReferences(input, path = []) {
 }
 
 // Check for valid color themes input
-function checkForValidColorThemesInput(input) {
+function checkForValidColorThemesInput(input: any) {
   const isValid =
     typeof input === "object" &&
     Object.keys(input).some((key) => typeof input[key] === "object");
@@ -75,11 +84,11 @@ function checkForValidColorThemesInput(input) {
 // Plugin definition
 // ------------------------------
 const multiThemePlugin = plugin.withOptions(
-  function (options) {
+  function (options: any) {
     const { colorThemes, paddingThemes, borderRadiusThemes } = options;
     checkForValidColorThemesInput(colorThemes);
     return function ({ addBase }) {
-      const res = {};
+      const res: Record<string, any> = {};
       Object.entries(colorThemes).forEach(([key, value]) => {
         const id = `[data-theme="${key}"]`;
         if (!res[id]) res[id] = {};
@@ -104,9 +113,6 @@ const multiThemePlugin = plugin.withOptions(
           ...getCssVariableDeclarations(value, ["padding"]),
         };
       });
-      // console.log("\n\n------------");
-      // console.log("res:", res);
-      // console.log("------------\n\n");
       addBase(res);
       addBase({
         [`[data-theme="scp"]`]: {
@@ -119,7 +125,13 @@ const multiThemePlugin = plugin.withOptions(
     };
   },
   function (options) {
-    const { colorThemes, paddingThemes, borderRadiusThemes } = options;
+    const {
+      colorThemes,
+      paddingThemes,
+      borderRadiusThemes,
+      styleOverrides,
+      variantOverrides,
+    } = options;
     checkForValidColorThemesInput(colorThemes);
     return {
       theme: {
@@ -141,6 +153,8 @@ const multiThemePlugin = plugin.withOptions(
             // primary: ["Edu AU VIC WA NT Hand", "sans-serif"],
             primary: ["var(--font-family-primary)", "sans-serif"],
           },
+          variantOverrides,
+          styleOverrides,
           // opacity: {
           //   "button-primary-disabled":
           //     "var(--opactity-button-primary-disabled)",

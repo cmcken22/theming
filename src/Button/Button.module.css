@@ -1,14 +1,28 @@
 .button {
   @apply p-button rounded-button;
   @apply font-primary;
+  @apply disabled:pointer-events-none;
 }
 
-.button--primary {
-  @apply bg-button-primary-background text-button-primary-contrastText;
-  @apply disabled:bg-button-primary-disabled-background/40 disabled:text-button-primary-disabled-contrastText;
+.primary--contained {
+  @apply bg-primary-main text-primary-contrastText;
+  @apply disabled:bg-primary-main/40 disabled:text-primary-contrastText;
+  @apply hover:bg-primary-300;
 }
 
-.button--secondary {
-  @apply bg-button-secondary-background text-button-secondary-contrastText;
-  @apply disabled:bg-button-secondary-disabled-background/40 disabled:text-button-secondary-disabled-contrastText;
+.secondary--contained {
+  @apply bg-secondary-main text-secondary-contrastText;
+  @apply disabled:bg-secondary-main/40 disabled:text-secondary-contrastText;
+  @apply hover:bg-secondary-300;
+}
+
+.primary--outlined {
+  @apply border border-primary-main text-primary-main;
+  @apply hover:bg-primary-main/10;
+  @apply disabled:border-primary-main/40 disabled:text-primary-500/40;
+}
+.secondary--outlined {
+  @apply border border-secondary-main text-secondary-main;
+  @apply hover:bg-secondary-main/10;
+  @apply disabled:border-secondary-main/40 disabled:text-secondary-500/40;
 }
