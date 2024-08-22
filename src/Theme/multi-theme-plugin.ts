@@ -80,71 +80,109 @@ function checkForValidColorThemesInput(input: any) {
   }
 }
 
+const getVars = (id: string, theme: any) => {
+  const { palette, borderRadius, padding, fontFamily } = theme;
+
+  const res: Record<string, any> = {};
+  Object.entries(palette || {}).forEach(([key, value]) => {
+    if (!res[id]) res[id] = {};
+    res[id] = {
+      ...res[id],
+      ...getCssVariableDeclarations(value, [key]),
+    };
+  });
+  Object.entries(borderRadius || {}).forEach(([key, value]) => {
+    if (!res[id]) res[id] = {};
+    res[id] = {
+      ...res[id],
+      [`--border-radius-${key}`]: value,
+    };
+  });
+  Object.entries(padding || {}).forEach(([key, value]) => {
+    if (!res[id]) res[id] = {};
+    res[id] = {
+      ...res[id],
+      [`--padding-${key}`]: value,
+    };
+  });
+  Object.entries(fontFamily || {}).forEach(([key, value]) => {
+    if (!res[id]) res[id] = {};
+    res[id] = {
+      ...res[id],
+      [`--font-family-${key}`]: value,
+    };
+  });
+
+  return res;
+};
+
 // ------------------------------
 // Plugin definition
 // ------------------------------
 const multiThemePlugin = plugin.withOptions(
-  function (options: any) {
-    const { colorThemes, paddingThemes, borderRadiusThemes } = options;
-    checkForValidColorThemesInput(colorThemes);
+  function (themes: any[]) {
     return function ({ addBase }) {
-      const res: Record<string, any> = {};
-      Object.entries(colorThemes).forEach(([key, value]) => {
-        const id = `[data-theme="${key}"]`;
-        if (!res[id]) res[id] = {};
-        res[id] = {
-          ...res[id],
-          ...getCssVariableDeclarations(value),
+      let res: Record<string, any> = {};
+
+      const baseTheme = themes?.[0];
+      const vars = getVars(`:root`, baseTheme);
+      res = {
+        ...res,
+        ...vars,
+      };
+
+      for (const theme of themes) {
+        const { name } = theme;
+        const vars = getVars(`[data-theme="${name}"]`, theme);
+        res = {
+          ...res,
+          ...vars,
         };
-      });
-      Object.entries(borderRadiusThemes).forEach(([key, value]) => {
-        const id = `[data-theme="${key}"]`;
-        if (!res[id]) res[id] = {};
-        res[id] = {
-          ...res[id],
-          ...getCssVariableDeclarations(value, ["border-radius"]),
-        };
-      });
-      Object.entries(paddingThemes).forEach(([key, value]) => {
-        const id = `[data-theme="${key}"]`;
-        if (!res[id]) res[id] = {};
-        res[id] = {
-          ...res[id],
-          ...getCssVariableDeclarations(value, ["padding"]),
-        };
-      });
+      }
+      // console.log("\n\n------------");
+      // console.log("res:", res);
+      // console.log("------------\n\n");
+
       addBase(res);
-      addBase({
-        [`[data-theme="scp"]`]: {
-          "--font-family-primary": "Edu AU VIC WA NT Hand",
-        },
-        [`[data-theme="radix"]`]: {
-          "--font-family-primary": "Red Hat Display",
-        },
-      });
+      // addBase({
+      //   [`[data-theme="scp"]`]: {
+      //     "--font-family-primary": "Edu AU VIC WA NT Hand",
+      //   },
+      //   [`[data-theme="radix"]`]: {
+      //     "--font-family-primary": "Red Hat Display",
+      //   },
+      // });
     };
   },
-  function (options) {
-    const {
-      colorThemes,
-      paddingThemes,
-      borderRadiusThemes,
-      styleOverrides,
-      variantOverrides,
-    } = options;
-    checkForValidColorThemesInput(colorThemes);
+  function (themes: any[]) {
+    const baseTheme = themes?.[0];
+
+    const allVariantOverrides: Record<string, any> = {};
+    for (const theme of themes) {
+      const { name, variantOverrides } = theme;
+      if (!variantOverrides) continue;
+      allVariantOverrides[name] = variantOverrides;
+    }
+
+    const allStyleOverrides: Record<string, any> = {};
+    for (const theme of themes) {
+      const { name, styleOverrides } = theme;
+      if (!styleOverrides) continue;
+      allStyleOverrides[name] = styleOverrides;
+    }
+
     return {
       theme: {
         extend: {
           colors: getColorUtilitiesWithCssVariableReferences(
-            Object.values(colorThemes)[0]
+            baseTheme?.palette
           ),
           borderRadius: getColorUtilitiesWithCssVariableReferences(
-            Object.values(borderRadiusThemes)[0],
+            baseTheme?.borderRadius,
             ["border-radius"]
           ),
           padding: getColorUtilitiesWithCssVariableReferences(
-            Object.values(paddingThemes)[0],
+            baseTheme?.padding,
             ["padding"]
           ),
           fontFamily: {
@@ -153,8 +191,8 @@ const multiThemePlugin = plugin.withOptions(
             // primary: ["Edu AU VIC WA NT Hand", "sans-serif"],
             primary: ["var(--font-family-primary)", "sans-serif"],
           },
-          variantOverrides,
-          styleOverrides,
+          variantOverrides: allVariantOverrides,
+          styleOverrides: allStyleOverrides,
           // opacity: {
           //   "button-primary-disabled":
           //     "var(--opactity-button-primary-disabled)",

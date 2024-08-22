@@ -1,5 +1,3 @@
-import hexOpacity from "hex-color-opacity";
-
 const baseColors = {
   scp: {
     common: {
@@ -95,24 +93,6 @@ const themeColors = {
     success: baseColors.scp.success,
     error: baseColors.scp.error,
     warning: baseColors.scp.warning,
-    // button: {
-    //   primary: {
-    //     background: baseColors.scp.primary["500"],
-    //     contrastText: baseColors.scp.common.white,
-    //     disabled: {
-    //       background: baseColors.scp.primary["500"],
-    //       contrastText: baseColors.scp.common.white,
-    //     },
-    //   },
-    //   secondary: {
-    //     background: baseColors.scp.secondary["500"],
-    //     contrastText: baseColors.scp.common.white,
-    //     disabled: {
-    //       background: baseColors.scp.secondary["500"],
-    //       contrastText: baseColors.scp.common.white,
-    //     },
-    //   },
-    // },
     input: {
       border: "#FF0000",
       background: baseColors.scp.common.white,
@@ -128,24 +108,6 @@ const themeColors = {
     success: baseColors.radix.success,
     error: baseColors.radix.error,
     warning: baseColors.radix.warning,
-    // button: {
-    //   primary: {
-    //     background: baseColors.radix.primary["500"],
-    //     contrastText: baseColors.radix.common.white,
-    //     disabled: {
-    //       background: "#C8C8C8",
-    //       contrastText: "#A6A6A6",
-    //     },
-    //   },
-    //   secondary: {
-    //     background: baseColors.radix.secondary["500"],
-    //     contrastText: baseColors.radix.common.white,
-    //     disabled: {
-    //       background: "#C8C8C8",
-    //       contrastText: "#A6A6A6",
-    //     },
-    //   },
-    // },
     input: {
       border: "#00FF00",
       background: baseColors.radix.common.white,

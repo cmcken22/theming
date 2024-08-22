@@ -21,7 +21,7 @@ const themeOptions = [
 
 function App() {
   const theme = useTheme();
-  const { setTheme } = useThemeContext();
+  const { setTheme, overrideTheme } = useThemeContext();
 
   const handleSetTheme = (themeName: string) => {
     setTheme(themeName);
@@ -54,25 +54,6 @@ function App() {
     },
   ];
 
-  useEffect(() => {
-    console.log("defaultTailwindConfig:", defaultTailwindConfig);
-    resolveConfig({
-      ...defaultTailwindConfig,
-      theme: {
-        ...defaultTailwindConfig.theme,
-        colorThemes: {
-          primary: "#ff5733",
-          secondary: "#33ff57",
-        },
-        paddingThemes: {
-          small: "4px",
-          large: "16px",
-        },
-        // ...theme,
-      },
-    });
-  }, []);
-
   return (
     <div className={`h-screen`}>
       <div className="flex p-7 flex-col items-center">
@@ -89,6 +70,7 @@ function App() {
             </li>
           ))}
         </ul>
+        <Button onClick={() => overrideTheme(theme)}>Override</Button>
         <div className="flex flex-col gap-1 mt-2">
           <table>
             <thead>
